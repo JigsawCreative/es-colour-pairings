@@ -1,0 +1,123 @@
+.tile-pairing-group {
+    margin-bottom: 3em;
+}
+
+        .tile-pairing-options {
+            display: flex;
+            flex-direction: row;
+                column-gap: 1%;
+                    max-width: 100%;
+    overflow-x: scroll;
+    padding-bottom: 1em;
+        }
+
+        .tile-pairing-option {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 190px;
+}
+.tile-pairing-option-swatch-loops {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.tile-pairing-option-swatch-loop:first-of-type {
+    width: 100%;
+}
+
+.tile-pairing-option-swatch-loop {
+    flex-grow: 1;
+    width: 50%;
+    line-height: 1;
+}
+
+.tile-pairing-option-swatch-loop a{position:relative;}
+
+.tile-pairing-option-swatch-loop img {
+    max-width: 100%;
+    display: block;
+    /* border-top:1px solid #fff; */
+}
+
+.tile-pairing-option-swatch-loop img {
+    aspect-ratio: 1.75 / 1;
+    object-fit: cover;
+
+}
+
+.tile-pairing-option-swatch-loop:first-of-type img {
+    aspect-ratio: 1 / 1;
+}
+
+.swatch-loops-2 .tile-pairing-option-swatch-loop:nth-of-type(2) img {
+    aspect-ratio: 3.5 / 1;
+}
+
+/* .swatch-loops-3 .tile-pairing-option-swatch-loop:nth-of-type(2) img {border-top:1px solid #ff0000}*/
+
+.tile-pairing-option-swatch-loop:first-of-type a:before {
+    content: attr(data-discount-rate);
+    position: absolute;
+    z-index: 2;
+    background: #7eacae;
+    line-height: 60px;
+    width: 60px;
+    padding: 0;
+    transform-origin: left top;
+    transform: translate(5px, 5px) scale(0.9);
+    text-align: center;
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 13px;
+    border-radius: 50%;
+}
+
+.tile-pairing-group-heading
+{ font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+font-size: 4vw;
+text-transform: uppercase;
+text-align: center;
+width:90%; 
+margin:2vw auto;
+}
+
+.tile-pairing-group-heading:after{
+    content:"2025/2026";
+    display: block;
+    border-top: 1px solid #000;
+    font-weight: 200;
+    font-size: 2vw;
+    padding-top:0.5vw;
+}
+
+.tile-pairing-group-heading:before{
+    content:"Trending";
+    display: block;
+    font-weight: 200;
+    font-size: 2vw;
+    line-height: 50%;
+}
+
+.pairing-groups-id-3923983 .tile-pairing-group-heading:before{
+    content:"Trending";
+}
+
+.tile-pairing-group-link a:after {
+    content: attr(data-attribute-topic);
+}
+
+.tile-pairing-option-heading:before{content:"View Option "}
+
+.tile-pairing-group-link {
+    text-align: right;
+}
+
+.tile-pairing-group-link a{
+    text-transform: uppercase;
+    text-decoration: none;
+        font-size: small;
+        line-height: 40px;
+        display: inline-block;
+}

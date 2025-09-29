@@ -23,8 +23,10 @@ if ( file_exists( ESCP_PATH . 'vendor/autoload.php' ) ) {
 }
 
 use ESColourPairings\API\ESCP_Cognito;
+use ESColourPairings\Assets\ESCP_Enqueue;
 use ESColourPairings\Database\ESCP_Create;
 use ESColourPairings\Database\ESCP_Update;
+use ESColourPairings\Templates\ESCP_RegisterTemplates;
 
 // Initialize database
 $escp_db_create = new ESCP_Create();
@@ -36,6 +38,8 @@ register_activation_hook( __FILE__, [ $escp_db_create, 'create_table' ] );
 add_action( 'plugins_loaded', function() {
 
     new ESCP_Cognito();
+    new ESCP_RegisterTemplates();
+    ESCP_Enqueue::init();
     ESCP_Update::init();
 
 });
