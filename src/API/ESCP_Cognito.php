@@ -1,5 +1,4 @@
 <?php
-
 namespace ESColourPairings\API;
 
 /**
@@ -41,22 +40,17 @@ class ESCP_Cognito {
 	 */
 	public function handle_submission( $request ) {
 
-		// Retrieve JSON
 		$data = $request->get_json_params();
-
-		// Return error if no data
 		if ( ! $data ) {
 			return new \WP_Error( 'no_data', 'No JSON received', array( 'status' => 400 ) );
 		}
 
 		global $wpdb;
 
-		// Set data/table values
 		$table      = $wpdb->prefix . 'escp_pairs';
-		$pairing_id = intval( $data['PairingID'] ?? 0 );
+		$pairing_id = (int) ( $data['PairingID'] ?? 0 );
 		$page_topic = sanitize_text_field( $data['Section']['PageTopic'] ?? '' );
 
-		// Loop over data and add to database
 		foreach ( $data['Section']['Grouping'] as $group ) {
 
 			$heading = sanitize_text_field( $group['Heading'] ?? '' );
@@ -66,23 +60,23 @@ class ESCP_Cognito {
 			}
 
 			foreach ( $group['Options'] as $option ) {
-				$product1 = intval( $option['Product1ID'] ?? 0 );
-				$product2 = intval( $option['Product2ID'] ?? 0 );
-				$product3 = intval( $option['Product3ID'] ?? 0 );
+				$product1 = (int) ( $option['Product1ID'] ?? 0 );
+				$product2 = (int) ( $option['Product2ID'] ?? 0 );
+				$product3 = (int) ( $option['Product3ID'] ?? 0 );
 
-				// Use ON DUPLICATE KEY UPDATE to preserve the original id
-				$sql = "INSERT INTO {$table} (pairing_id, page_topic, heading, product1id, product2id, product3id)
-                        VALUES (%d, %s, %s, %d, %d, %d)
-                        ON DUPLICATE KEY UPDATE
-                            page_topic = VALUES(page_topic),
-                            heading    = VALUES(heading),
-                            product1id = VALUES(product1id),
-                            product2id = VALUES(product2id),
-                            product3id = VALUES(product3id)";
-
+				// Prepare & execute with placeholders directly in the call.
 				$wpdb->query(
 					$wpdb->prepare(
-						$sql,
+						"INSERT INTO {$table}
+							(pairing_id, page_topic, heading, product1id, product2id, product3id)
+						 VALUES
+							(%d, %s, %s, %d, %d, %d)
+						 ON DUPLICATE KEY UPDATE
+							page_topic = VALUES(page_topic),
+							heading    = VALUES(heading),
+							product1id = VALUES(product1id),
+							product2id = VALUES(product2id),
+							product3id = VALUES(product3id)",
 						$pairing_id,
 						$page_topic,
 						$heading,
