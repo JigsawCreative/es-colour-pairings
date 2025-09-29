@@ -11,24 +11,24 @@ function clean() {
   return del(['dist/**', '!dist']);
 }
 
-// --- Minify & concatenate CSS into dist/plugin-starter/assets/css ---
+// --- Minify & concatenate CSS into dist/es-colour-pairings/assets/css ---
 function minifyAndConcatCSS() {
   return src('assets/css/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(concat('style.min.css'))
     .pipe(cleanCSS({ level: 2 }))
     .pipe(sourcemaps.write('.'))
-    .pipe(dest('dist/plugin-starter/assets/css'));
+    .pipe(dest('dist/es-colour-pairings/assets/css'));
 }
 
-// --- Minify & concatenate JS into dist/plugin-starter/assets/js ---
+// --- Minify & concatenate JS into dist/es-colour-pairings/assets/js ---
 function minifyAndConcatJS() {
   return src('assets/js/**/*.js')
     .pipe(sourcemaps.init())
     .pipe(concat('scripts.min.js'))
     .pipe(terser())
     .pipe(sourcemaps.write('.'))
-    .pipe(dest('dist/plugin-starter/assets/js'));
+    .pipe(dest('dist/es-colour-pairings/assets/js'));
 }
 
 // --- Copy everything else (PHP, vendor, images, etc.) ---
@@ -48,7 +48,7 @@ function copyOtherFiles() {
     '!assets/css/**',   // we already process CSS separately
     '!assets/js/**'     // we already process JS separately
   ], { dot: true })
-  .pipe(dest('dist/plugin-starter'));
+  .pipe(dest('dist/es-colour-pairings'));
 }
 
 // --- Watch for changes during development ---

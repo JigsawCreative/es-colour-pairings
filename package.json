@@ -1,5 +1,5 @@
 {
-  "name": "plugin-starter",
+  "name": "es-colour-pairings",
   "private": true,
   "scripts": {
     "build:js": "rollup -c",
