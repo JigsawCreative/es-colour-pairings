@@ -1,4 +1,10 @@
 <?php
+/**
+ * Handles Cognito form submissions for ES Colour Pairings.
+ *
+ * @package ESColourPairings\API
+ */
+
 namespace ESColourPairings\API;
 
 /**
@@ -64,19 +70,18 @@ class ESCP_Cognito {
 				$product2 = (int) ( $option['Product2ID'] ?? 0 );
 				$product3 = (int) ( $option['Product3ID'] ?? 0 );
 
-				// Prepare & execute with placeholders directly in the call.
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->query(
 					$wpdb->prepare(
-						"INSERT INTO {$table}
-							(pairing_id, page_topic, heading, product1id, product2id, product3id)
-						 VALUES
-							(%d, %s, %s, %d, %d, %d)
-						 ON DUPLICATE KEY UPDATE
-							page_topic = VALUES(page_topic),
-							heading    = VALUES(heading),
-							product1id = VALUES(product1id),
-							product2id = VALUES(product2id),
-							product3id = VALUES(product3id)",
+						"INSERT INTO {$wpdb->prefix}escp_pairs (pairing_id, page_topic, heading, product1id, product2id, product3id)
+                        VALUES (%d, %s, %s, %d, %d, %d)
+                        ON DUPLICATE KEY UPDATE
+                            page_topic = VALUES(page_topic),
+                            heading    = VALUES(heading),
+                            product1id = VALUES(product1id),
+                            product2id = VALUES(product2id),
+                            product3id = VALUES(product3id)",
 						$pairing_id,
 						$page_topic,
 						$heading,
