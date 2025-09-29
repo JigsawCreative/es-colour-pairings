@@ -22,12 +22,20 @@ if ( file_exists( ESCP_PATH . 'vendor/autoload.php' ) ) {
     require_once ESCP_PATH . 'vendor/autoload.php';
 }
 
-use ESColourPairings\ESCP_Database;
+use ESColourPairings\API\ESCP_Cognito;
+use ESColourPairings\Database\ESCP_Create;
+use ESColourPairings\Database\ESCP_Update;
 
-// Bootstrap main class
+// Initialize database
+$escp_db_create = new ESCP_Create();
+
+// Register activation hook
+register_activation_hook( __FILE__, [ $escp_db_create, 'create_table' ] );
+
+// Bootstrap main classes
 add_action( 'plugins_loaded', function() {
 
-    // Initialize database
-    $escp_db = new ESCP_Database();
+    new ESCP_Cognito();
+    ESCP_Update::init();
 
 });

@@ -1,17 +1,15 @@
 <?php
 /**
- * ES Colour Pairings database class.
+ * ES Colour Pairings database creation class.
  *
  * Handles creation of plugin tables.
  *
  * @package ES Colour Pairings
  */
 
-namespace ESColourPairings;
+namespace ESColourPairings\Database;
 
-defined( 'ABSPATH' ) || exit;
-
-class ESCP_Database {
+class ESCP_Create {
 
     /**
      * Table name.
@@ -26,31 +24,33 @@ class ESCP_Database {
     public function __construct() {
 
         global $wpdb;
-		
         $this->table_name = $wpdb->prefix . 'escp_pairs';
 
-        // Hook into plugin activation to create table
-        register_activation_hook( __FILE__, [ $this, 'create_table' ] );
     }
 
     /**
      * Create the database table.
      */
     public function create_table() {
+
         global $wpdb;
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE {$this->table_name} (
-            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            colour_from VARCHAR(50) NOT NULL,
-            colour_to VARCHAR(50) NOT NULL,
+            id INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            pairing_id INT(8) NOT NULL,
+            page_topic VARCHAR(50) NOT NULL,
+            heading VARCHAR(50) NOT NULL,
+            product1id INT(5) NOT NULL,
+            product2id INT(5) NOT NULL,
+            product3id INT(5) NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY  (id)
         ) $charset_collate;";
 
         dbDelta( $sql );
+        
     }
 }
