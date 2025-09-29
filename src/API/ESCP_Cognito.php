@@ -41,22 +41,22 @@ class ESCP_Cognito {
 	 */
 	public function handle_submission( $request ) {
 
-        // Retrieve JSON
+		// Retrieve JSON
 		$data = $request->get_json_params();
 
-        // Return error if no data
+		// Return error if no data
 		if ( ! $data ) {
 			return new \WP_Error( 'no_data', 'No JSON received', array( 'status' => 400 ) );
 		}
 
 		global $wpdb;
 
-        // Set data/table values
+		// Set data/table values
 		$table      = $wpdb->prefix . 'escp_pairs';
 		$pairing_id = intval( $data['PairingID'] ?? 0 );
 		$page_topic = sanitize_text_field( $data['Section']['PageTopic'] ?? '' );
 
-        // Loop over data and add to database
+		// Loop over data and add to database
 		foreach ( $data['Section']['Grouping'] as $group ) {
 
 			$heading = sanitize_text_field( $group['Heading'] ?? '' );
@@ -80,17 +80,17 @@ class ESCP_Cognito {
                             product2id = VALUES(product2id),
                             product3id = VALUES(product3id)";
 
-                $wpdb->query(
-                    $wpdb->prepare(
-                        $sql,
-                        $pairing_id,
-                        $page_topic,
-                        $heading,
-                        $product1,
-                        $product2,
-                        $product3
-                    )
-                );
+				$wpdb->query(
+					$wpdb->prepare(
+						$sql,
+						$pairing_id,
+						$page_topic,
+						$heading,
+						$product1,
+						$product2,
+						$product3
+					)
+				);
 			}
 		}
 
