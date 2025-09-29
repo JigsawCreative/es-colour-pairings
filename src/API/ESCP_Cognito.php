@@ -2,16 +2,24 @@
 
 namespace ESColourPairings\API;
 
+/**
+ * Handles Cognito form submissions for ES Colour Pairings.
+ */
 class ESCP_Cognito {
 
+	/**
+	 * Constructor.
+	 *
+	 * Hooks REST endpoint when plugin is loaded.
+	 */
 	public function __construct() {
-
-		// Hook REST endpoint when plugin is loaded
 		add_action( 'rest_api_init', array( $this, 'register_endpoint' ) );
 	}
 
+	/**
+	 * Registers the REST API endpoint.
+	 */
 	public function register_endpoint() {
-
 		register_rest_route(
 			'escp/v1',
 			'/cognito-submit',
@@ -23,6 +31,14 @@ class ESCP_Cognito {
 		);
 	}
 
+	/**
+	 * Handles incoming Cognito form submissions.
+	 *
+	 * Updates existing row if pairing_id exists, inserts otherwise.
+	 *
+	 * @param \WP_REST_Request $request The incoming REST request.
+	 * @return array|\WP_Error Success array or WP_Error on failure.
+	 */
 	public function handle_submission( $request ) {
 
 		$data = $request->get_json_params();
@@ -32,43 +48,45 @@ class ESCP_Cognito {
 		}
 
 		global $wpdb;
-		$table = $wpdb->prefix . 'escp_pairs';
+		$table      = $wpdb->prefix . 'escp_pairs';
+		$pairing_id = intval( $data['PairingID'] ?? 0 );
+		$page_topic = sanitize_text_field( $data['Section']['PageTopic'] ?? '' );
 
-		// Base values
-		$pairing_id = $data['PairingID'] ?? 0;
-		$page_topic = $data['Section']['PageTopic'] ?? '';
+		if ( empty( $data['Section']['Grouping'] ) || ! is_array( $data['Section']['Grouping'] ) ) {
+			return new \WP_Error( 'no_grouping', 'No grouping data provided', array( 'status' => 400 ) );
+		}
 
-		// Loop through each grouping
-		if ( ! empty( $data['Section']['Grouping'] ) && is_array( $data['Section']['Grouping'] ) ) {
+		foreach ( $data['Section']['Grouping'] as $group ) {
+			$heading = sanitize_text_field( $group['Heading'] ?? '' );
 
-			foreach ( $data['Section']['Grouping'] as $group ) {
+			if ( empty( $group['Options'] ) || ! is_array( $group['Options'] ) ) {
+				continue;
+			}
 
-				$heading = $group['Heading'] ?? '';
+			foreach ( $group['Options'] as $option ) {
+				$product1 = intval( $option['Product1ID'] ?? 0 );
+				$product2 = intval( $option['Product2ID'] ?? 0 );
+				$product3 = intval( $option['Product3ID'] ?? 0 );
 
-				// Loop through each option in the grouping
-				if ( ! empty( $group['Options'] ) && is_array( $group['Options'] ) ) {
-
-					foreach ( $group['Options'] as $option ) {
-
-						// Extract product IDs
-						$product1 = $option['Product1ID'] ?? 0;
-						$product2 = $option['Product2ID'] ?? 0;
-						$product3 = $option['Product3ID'] ?? 0;
-
-						// Insert one row per option
-						$wpdb->insert(
-							$table,
-							array(
-								'pairing_id' => $pairing_id,
-								'page_topic' => $page_topic,
-								'heading'    => $heading,
-								'product1id' => $product1,
-								'product2id' => $product2,
-								'product3id' => $product3,
-							)
-						);
-					}
-				}
+				// Use ON DUPLICATE KEY UPDATE to preserve the original id
+				$wpdb->query(
+					$wpdb->prepare(
+						"INSERT INTO $table (pairing_id, page_topic, heading, product1id, product2id, product3id)
+                        VALUES (%d, %s, %s, %d, %d, %d)
+                        ON DUPLICATE KEY UPDATE
+                            page_topic = VALUES(page_topic),
+                            heading    = VALUES(heading),
+                            product1id = VALUES(product1id),
+                            product2id = VALUES(product2id),
+                            product3id = VALUES(product3id)",
+						$pairing_id,
+						$page_topic,
+						$heading,
+						$product1,
+						$product2,
+						$product3
+					)
+				);
 			}
 		}
 

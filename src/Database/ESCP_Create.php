@@ -41,12 +41,13 @@ class ESCP_Create {
             id INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             pairing_id INT(8) NOT NULL,
             page_topic VARCHAR(50) NOT NULL,
-            heading VARCHAR(50) NOT NULL,
+            heading    VARCHAR(50) NOT NULL,
             product1id INT(5) NOT NULL,
             product2id INT(5) NOT NULL,
             product3id INT(5) NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY  (id)
+            PRIMARY KEY  (id),
+            UNIQUE KEY pairing_id (pairing_id)
         ) $charset_collate;";
 
 		dbDelta( $sql );
