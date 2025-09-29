@@ -41,22 +41,24 @@ class ESCP_Cognito {
 	 */
 	public function handle_submission( $request ) {
 
+        // Retrieve JSON
 		$data = $request->get_json_params();
 
+        // Return error if no data
 		if ( ! $data ) {
 			return new \WP_Error( 'no_data', 'No JSON received', array( 'status' => 400 ) );
 		}
 
 		global $wpdb;
+
+        // Set data/table values
 		$table      = $wpdb->prefix . 'escp_pairs';
 		$pairing_id = intval( $data['PairingID'] ?? 0 );
 		$page_topic = sanitize_text_field( $data['Section']['PageTopic'] ?? '' );
 
-		if ( empty( $data['Section']['Grouping'] ) || ! is_array( $data['Section']['Grouping'] ) ) {
-			return new \WP_Error( 'no_grouping', 'No grouping data provided', array( 'status' => 400 ) );
-		}
-
+        // Loop over data and add to database
 		foreach ( $data['Section']['Grouping'] as $group ) {
+
 			$heading = sanitize_text_field( $group['Heading'] ?? '' );
 
 			if ( empty( $group['Options'] ) || ! is_array( $group['Options'] ) ) {
@@ -69,24 +71,26 @@ class ESCP_Cognito {
 				$product3 = intval( $option['Product3ID'] ?? 0 );
 
 				// Use ON DUPLICATE KEY UPDATE to preserve the original id
-				$wpdb->query(
-					$wpdb->prepare(
-						"INSERT INTO $table (pairing_id, page_topic, heading, product1id, product2id, product3id)
+				$sql = "INSERT INTO {$table} (pairing_id, page_topic, heading, product1id, product2id, product3id)
                         VALUES (%d, %s, %s, %d, %d, %d)
                         ON DUPLICATE KEY UPDATE
                             page_topic = VALUES(page_topic),
                             heading    = VALUES(heading),
                             product1id = VALUES(product1id),
                             product2id = VALUES(product2id),
-                            product3id = VALUES(product3id)",
-						$pairing_id,
-						$page_topic,
-						$heading,
-						$product1,
-						$product2,
-						$product3
-					)
-				);
+                            product3id = VALUES(product3id)";
+
+                $wpdb->query(
+                    $wpdb->prepare(
+                        $sql,
+                        $pairing_id,
+                        $page_topic,
+                        $heading,
+                        $product1,
+                        $product2,
+                        $product3
+                    )
+                );
 			}
 		}
 
