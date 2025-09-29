@@ -1,0 +1,33 @@
+# Node modules
+node_modules/
+
+# Composer vendor folder
+vendor/
+
+# Distribution folder
+dist/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# NPM / Yarn lock files (optional, if you want to regenerate per project)
+package-lock.json
+yarn.lock
+
+# PHPUnit cache
+.phpunit.result.cache
+
+# WordPress-specific (if working inside a dev site folder)
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/

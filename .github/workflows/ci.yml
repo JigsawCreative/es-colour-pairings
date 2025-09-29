@@ -1,0 +1,105 @@
+name: CI / Build / Release
+
+permissions:
+  contents: write  # optional, ensures GITHUB_TOKEN can push if not using PAT
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Node & build assets
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Build JS/CSS
+        run: npm ci && npm run build
+
+      # 3. PHP & Composer
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      # 4. PHPCS configuration
+      - name: Reset PHPCS installed paths
+        run: ./vendor/bin/phpcs --config-delete installed_paths || true
+
+      - name: Register PHPCS standards
+        run: ./vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/phpcsstandards/phpcsutils,vendor/phpcsstandards/phpcsextra
+
+      - name: List PHPCS standards
+        run: ./vendor/bin/phpcs -i
+
+      # 5. PHP lint
+      - name: PHP syntax check
+        run: find src -name "*.php" -exec php -l {} \;
+
+      # 6. Run PHPCS
+      - name: Run PHPCS
+        run: ./vendor/bin/phpcs --standard=WordPress src
+
+      # 7. Run PHPUnit
+      - name: Run PHPUnit tests
+        run: ./vendor/bin/phpunit
+
+  release:
+    needs: build-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Set up Node
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3. Install Composer dependencies
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      # 4. Build plugin distribution
+      - name: Build dist
+        run: npm ci && npm run dist
+
+      # 5. Zip the plugin
+      - name: Zip plugin
+        run: cd dist && zip -r ../plugin-starter.zip plugin-starter
+
+      # 6. Create Git tag with PAT
+      - name: Create Git tag
+        env:
+          PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "v${{ github.run_number }}" -m "Release v${{ github.run_number }}"
+          git push https://x-access-token:${PAT_GITHUB_TOKEN}@github.com/${{ github.repository }} v${{ github.run_number }}
+
+      # 7. Create GitHub Release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ github.run_number }}"
+          files: plugin-starter.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
