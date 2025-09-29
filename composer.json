@@ -16,7 +16,7 @@
   },
   "scripts": {
         "test": "phpunit",
-        "cs": "phpcs --standard=WordPress src"
+        "cs": "phpcs src"
     },
   "config": {
     "allow-plugins": {
