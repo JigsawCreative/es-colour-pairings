@@ -51,7 +51,7 @@ jobs:
 
       # 6. Run PHPCS
       - name: Run PHPCS
-        run: ./vendor/bin/phpcs --standard=WordPress src
+        run: ./vendor/bin/phpcs src
 
       # 7. Run PHPUnit
       - name: Run PHPUnit tests
