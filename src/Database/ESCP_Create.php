@@ -11,34 +11,33 @@ namespace ESColourPairings\Database;
 
 class ESCP_Create {
 
-    /**
-     * Table name.
-     *
-     * @var string
-     */
-    private $table_name;
+	/**
+	 * Table name.
+	 *
+	 * @var string
+	 */
+	private $table_name;
 
-    /**
-     * Constructor.
-     */
-    public function __construct() {
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
 
-        global $wpdb;
-        $this->table_name = $wpdb->prefix . 'escp_pairs';
+		global $wpdb;
+		$this->table_name = $wpdb->prefix . 'escp_pairs';
+	}
 
-    }
+	/**
+	 * Create the database table.
+	 */
+	public function create_table() {
 
-    /**
-     * Create the database table.
-     */
-    public function create_table() {
+		global $wpdb;
 
-        global $wpdb;
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		$charset_collate = $wpdb->get_charset_collate();
 
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        $charset_collate = $wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$this->table_name} (
+		$sql = "CREATE TABLE {$this->table_name} (
             id INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             pairing_id INT(8) NOT NULL,
             page_topic VARCHAR(50) NOT NULL,
@@ -50,7 +49,6 @@ class ESCP_Create {
             PRIMARY KEY  (id)
         ) $charset_collate;";
 
-        dbDelta( $sql );
-        
-    }
+		dbDelta( $sql );
+	}
 }

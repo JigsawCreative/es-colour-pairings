@@ -12,9 +12,6 @@ namespace ESColourPairings\Database;
 
 class ESCP_Update {
 
-    public static function init() {
-
-        
-    }
-
+	public static function init() {
+	}
 }

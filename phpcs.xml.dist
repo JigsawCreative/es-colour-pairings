@@ -7,7 +7,4 @@
         <!-- Disable file name convention check -->
         <exclude name="WordPress.Files.FileName" />
     </rule>
-
-    <!-- You can also add other rules / overrides here -->
-    <rule ref="WordPress-VIP" />
 </ruleset>
