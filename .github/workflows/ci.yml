@@ -83,7 +83,7 @@ jobs:
 
       # 5. Zip the plugin
       - name: Zip plugin
-        run: cd dist && zip -r ../plugin-starter.zip plugin-starter
+        run: cd dist && zip -r ../es-colour-pairings.zip es-colour-pairings
 
       # 6. Create Git tag with PAT
       - name: Create Git tag
@@ -100,6 +100,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "v${{ github.run_number }}"
-          files: plugin-starter.zip
+          files: es-colour-pairings.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
