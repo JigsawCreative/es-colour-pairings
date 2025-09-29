@@ -20,10 +20,6 @@ Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
-# NPM / Yarn lock files (optional, if you want to regenerate per project)
-package-lock.json
-yarn.lock
-
 # PHPUnit cache
 .phpunit.result.cache
 
