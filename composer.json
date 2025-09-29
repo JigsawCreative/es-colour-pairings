@@ -14,10 +14,6 @@
     "phpcsstandards/phpcsutils": "^1.1",
     "phpcsstandards/phpcsextra": "^1.4"
   },
-  "scripts": {
-        "test": "phpunit",
-        "cs": "phpcs src"
-    },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true

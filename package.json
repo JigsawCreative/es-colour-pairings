@@ -6,7 +6,9 @@
     "build:css": "gulp css",
     "build": "gulp build",
     "dist": "gulp build",
-    "watch": "gulp"
+    "watch": "gulp",
+    "test": "phpunit",
+    "cs": "phpcs src"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
