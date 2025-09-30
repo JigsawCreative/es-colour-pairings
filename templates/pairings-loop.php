@@ -8,7 +8,7 @@
 
     // Fetch groups from database
     $groups = ESCP_DisplayPairings::get_pairings(get_field('pairing_id'));
-    //var_dump($groups);
+
 ?>
 
     <div class="tile-pairing-container"><!-- this is the pairing template container -->
@@ -26,7 +26,7 @@
 
                     <div class="tile-pairing-options">
 
-                        <?php foreach($pairings['products'] as $products) : ?>
+                        <?php foreach($pairings['products'] as $key => $products) : ?>
 
                             <div class="tile-pairing-option">
 
@@ -47,11 +47,11 @@
 
                                     ?>
 
-                                    <div class="tile-pairing-option-swatch-loop <?php echo $class; ?>">
-                                        <a href="" data-discount-rate="<?php echo get_field('discount_percentage', $product); ?>% Off" class="tooltip">
-                                            <img src=<?php echo wp_get_attachment_url( get_post_thumbnail_id( $product ) ); ?>"><span class="tooltiptext"><?php echo get_the_title( $product ); ?> @ £<?php echo get_field('discounted_price_per_sqm', $product); ?> Per M²</span>
-                                        </a>
-                                    </div>
+                                        <div class="tile-pairing-option-swatch-loop <?php echo $class; ?>">
+                                            <a href="https://emporiosurfaces.local/product-recommendations/product-comparison/?ids=<?php echo implode(",", $products); ?>" data-discount-rate="<?php echo get_field('discount_percentage', $product); ?>% Off" class="tooltip">
+                                                <img src=<?php echo wp_get_attachment_image_url( get_post_thumbnail_id( $product ), 'samples' ); ?>" data-batch-id="<?php echo $product; ?>"><span class="tooltiptext"><?php echo get_the_title( $product ); ?> @ £<?php echo get_field('discounted_price_per_sqm', $product); ?> Per M²</span>
+                                            </a>
+                                        </div>
 
                                     <?php endforeach; ?>
 

@@ -18,15 +18,24 @@ class ESCP_RegisterTemplates {
 
 	public function add_template( $templates ) {
 
-		$templates['pairings-loop.php'] = 'Pairings Loop';
+		$templates['pairings-loop.php']      = 'Pairings Loop';
+		$templates['product-comparison.php'] = 'Product Comparison';
 
 		return $templates;
 	}
 
 	public function load_template( $template ) {
 
-		if ( is_page() && get_page_template_slug() === 'pairings-loop.php' ) {
-			return plugin_dir_path( dirname( __DIR__, 1 ) ) . 'templates/pairings-loop.php';
+		$current_slug = get_page_template_slug();
+
+		if ( is_page() && $current_slug ) {
+			if ( 'pairings-loop.php' === $current_slug ) {
+				return plugin_dir_path( dirname( __DIR__, 1 ) ) . 'templates/pairings-loop.php';
+			}
+
+			if ( 'product-comparison.php' === $current_slug ) {
+				return plugin_dir_path( dirname( __DIR__, 1 ) ) . 'templates/product-comparison.php';
+			}
 		}
 
 		return $template;

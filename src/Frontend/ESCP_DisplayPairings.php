@@ -36,7 +36,8 @@ class ESCP_DisplayPairings {
 		foreach ( $rows as &$row ) {
 
 			// Decode JSON products column (keyed by cognito_option_id)
-			$row['products'] = json_decode( $row['products'], true );
+			$decoded         = json_decode( $row['products'], true );
+			$row['products'] = is_array( $decoded ) ? array_values( $decoded ) : array();
 
 		}
 
