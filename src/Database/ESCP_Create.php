@@ -22,13 +22,15 @@ class ESCP_Create {
 	 * Constructor.
 	 */
 	public function __construct() {
-
 		global $wpdb;
 		$this->table_name = $wpdb->prefix . 'escp_pairs';
 	}
 
 	/**
 	 * Create the database table.
+	 *
+	 * Products are stored as JSON keyed by Cognito Option ID.
+	 * Notes like `more_link` are retained.
 	 */
 	public function create_table() {
 
@@ -41,12 +43,11 @@ class ESCP_Create {
             id INT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             pairing_id INT(8) NOT NULL,
             page_topic VARCHAR(50) NOT NULL,
-            heading    VARCHAR(50) NOT NULL,
-            product1id INT(5) NOT NULL,
-            product2id INT(5) NOT NULL,
-            product3id INT(5) NOT NULL,
+            heading VARCHAR(50) NOT NULL,
+            products JSON NOT NULL, -- JSON of products keyed by cognito_option_id
+            more_link VARCHAR(256) NOT NULL, -- retained note
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY  (id)
+            PRIMARY KEY (id)
         ) $charset_collate;";
 
 		dbDelta( $sql );

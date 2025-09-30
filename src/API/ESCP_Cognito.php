@@ -40,6 +40,8 @@ class ESCP_Cognito {
 	 * Handles incoming Cognito form submissions.
 	 *
 	 * Updates existing row if pairing_id exists, inserts otherwise.
+	 * Products are stored as JSON keyed by Cognito Option ID.
+	 * Notes like `more_link` are retained.
 	 *
 	 * @param \WP_REST_Request $request The incoming REST request.
 	 * @return array|\WP_Error Success array or WP_Error on failure.
@@ -58,37 +60,46 @@ class ESCP_Cognito {
 
 		// Loop each Grouping
 		foreach ( $data['Section']['Grouping'] as $group ) {
-			$heading = sanitize_text_field( $group['Heading'] ?? '' );
+
+			$heading   = sanitize_text_field( $group['Heading'] ?? '' );
+			$more_link = sanitize_text_field( $group['MoreLink'] ?? '' );
 
 			if ( empty( $group['Options'] ) || ! is_array( $group['Options'] ) ) {
 				continue;
 			}
 
-			// Loop each Options row = one DB row per option.
+			// Build JSON of products keyed by Cognito Option ID
+			$products_json = array();
 			foreach ( $group['Options'] as $option ) {
-				$product1 = (int) ( $option['Product1ID'] ?? 0 );
-				$product2 = (int) ( $option['Product2ID'] ?? 0 );
-				$product3 = (int) ( $option['Product3ID'] ?? 0 );
+				$cognito_option_id = sanitize_text_field( $option['Id'] ?? '' );
 
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->query(
-					$wpdb->prepare(
-						'INSERT INTO wp_escp_pairs
-							(pairing_id, page_topic, heading, product1id, product2id, product3id)
-						VALUES
-							(%d, %s, %s, %d, %d, %d)
-						',
-						$pairing_id,
-						strtolower( $page_topic ),
-						strtolower( $heading ),
-						$product1,
-						$product2,
-						$product3
+				$products = array_filter(
+					array(
+						isset( $option['Product1ID'] ) ? (int) $option['Product1ID'] : null,
+						isset( $option['Product2ID'] ) ? (int) $option['Product2ID'] : null,
+						isset( $option['Product3ID'] ) ? (int) $option['Product3ID'] : null,
 					)
 				);
+
+				if ( $products ) {
+					$products_json[ $cognito_option_id ] = array_values( $products );
+				}
 			}
+
+			// Insert row per heading with JSON products and notes
+			$wpdb->query(
+				$wpdb->prepare(
+					"INSERT INTO {$wpdb->prefix}escp_pairs
+                        (pairing_id, page_topic, heading, products, more_link)
+                    VALUES
+                        (%d, %s, %s, %s, %s)",
+					$pairing_id,
+					strtolower( $page_topic ),
+					strtolower( $heading ),
+					wp_json_encode( $products_json ),
+					$more_link
+				)
+			);
 		}
 
 		return array( 'success' => true );
