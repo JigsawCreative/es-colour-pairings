@@ -53,7 +53,7 @@ class ESCP_Cognito {
 
 		global $wpdb;
 
-		$pairing_id = (int) ( $data['PairingID'] ?? 0 );
+		$pairing_id = isset( $data['PairingID'] ) ? (int) $data['PairingID'] : 0;
 		$page_topic = sanitize_text_field( $data['Section']['PageTopic'] ?? '' );
 
 		// Loop each Grouping
