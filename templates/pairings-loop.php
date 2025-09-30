@@ -4,6 +4,10 @@
     
     get_header();
 
+    use ESColourPairings\Frontend\ESCP_DisplayPairings;
+
+    $pairings = ESCP_DisplayPairings::get_pairings_by_topic(strtolower(get_the_title()));
+var_dump($pairings);
 ?>
 
     <div class="tile-pairing-container"><!-- this is the pairing template container -->
@@ -19,51 +23,26 @@
                     Warm Tones
                 </div>
                 <div class="tile-pairing-options">
-                   
-                    <!-- 
-                    ---------------------------------
-                    loop this for each option
-                    -->
-                    <div class="tile-pairing-option">
-                        <div class="tile-pairing-option-heading">1</div>
-                        <div class="tile-pairing-option-swatch-loops swatch-loops-3">
-                            <div class="tile-pairing-option-swatch-loop"><a href="link to recommendation template with up to three IDS included" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Amalfi_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Pewter Smoke @ £47.52 Per M²</span></a></div>
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Lipari_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Powder Bone @ £47.52 Per M²</span></a></div>
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Dorato-1200x1200-1-700x700.jpg"><span class="tooltiptext">Fragmenta Botticino Dorato @ £47.52 Per M²</span></a></div>
-                        </div><!-- end tile-pairing-option-swatch-loops -->
-                    </div><!-- end tile-pairing-option -->
 
+                    <?php foreach($pairings as $key => $pairing) : ?>
 
-                    <!-- 
-                    ---------------------------------
-                    end loop this for each option
-                    --> 
+                        <div class="tile-pairing-option">
+                            <div class="tile-pairing-option-heading"><?php echo $key + 1; ?></div>
+                            <div class="tile-pairing-option-swatch-loops swatch-loops-3">
+                                <?php foreach($pairing['products'] as $product) :  ?>
 
-                    <div class="tile-pairing-option">
-                        <div class="tile-pairing-option-heading">2</div>
-                        <div class="tile-pairing-option-swatch-loops swatch-loops-3">
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Dorato-1200x1200-1-700x700.jpg"><span class="tooltiptext">Fragmenta Botticino Dorato @ £47.52 Per M²</span></a></div>
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Lipari_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Powder Bone @ £47.52 Per M²</span></a></div>
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Amalfi_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Pewter Smoke @ £47.52 Per M²</span></a></div>
-                        </div><!-- end tile-pairing-option-swatch-loops -->
-                    </div><!-- end tile-pairing-option -->
+                                    <div class="tile-pairing-option-swatch-loop">
+                                        <a href="" data-discount-rate="<?php echo get_field('discount_percentage', $product); ?>% Off" class="tooltip">
+                                            <img src=<?php echo wp_get_attachment_url( get_post_thumbnail_id( $product ) ); ?>"><span class="tooltiptext">Bits and Pieces Powder Bone @ £47.52 Per M²</span>
+                                        </a>
+                                    </div>
 
-                    <div class="tile-pairing-option">
-                        <div class="tile-pairing-option-heading">3</div>
-                        <div class="tile-pairing-option-swatch-loops swatch-loops-2">
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Lipari_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Powder Bone @ £47.52 Per M²</span></a></div>
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Amalfi_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Pewter Smoke @ £47.52 Per M²</span></a></div>
-                            
-                            
-                        </div><!-- end tile-pairing-option-swatch-loops -->
-                    </div><!-- end tile-pairing-option -->
+                                <?php endforeach; ?>
+                                
+                            </div><!-- end tile-pairing-option-swatch-loops -->
+                        </div><!-- end tile-pairing-option -->
 
-                    <div class="tile-pairing-option">
-                        <div class="tile-pairing-option-heading">4</div>
-                        <div class="tile-pairing-option-swatch-loops swatch-loops-1">
-                            <div class="tile-pairing-option-swatch-loop"><a href="" data-discount-rate="45% Off" class="tooltip"><img src="https://emporiosurfaces.com/wp-content/uploads/Amalfi_80x80-700x700.jpg"><span class="tooltiptext">Bits and Pieces Pewter Smoke @ £47.52 Per M²</span></a></div>
-                        </div><!-- end tile-pairing-option-swatch-loops -->
-                    </div><!-- end tile-pairing-option -->
+                    <?php endforeach; ?>
 
                 </div><!-- end tile-pairing-options -->
 

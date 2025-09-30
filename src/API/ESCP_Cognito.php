@@ -53,38 +53,36 @@ class ESCP_Cognito {
 
 		global $wpdb;
 
-		$table      = $wpdb->prefix . 'escp_pairs';
 		$pairing_id = (int) ( $data['PairingID'] ?? 0 );
 		$page_topic = sanitize_text_field( $data['Section']['PageTopic'] ?? '' );
 
+		// Loop each Grouping
 		foreach ( $data['Section']['Grouping'] as $group ) {
-
 			$heading = sanitize_text_field( $group['Heading'] ?? '' );
 
 			if ( empty( $group['Options'] ) || ! is_array( $group['Options'] ) ) {
 				continue;
 			}
 
+			// Loop each Options row = one DB row per option.
 			foreach ( $group['Options'] as $option ) {
 				$product1 = (int) ( $option['Product1ID'] ?? 0 );
 				$product2 = (int) ( $option['Product2ID'] ?? 0 );
 				$product3 = (int) ( $option['Product3ID'] ?? 0 );
 
-                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->query(
 					$wpdb->prepare(
-						"INSERT INTO {$wpdb->prefix}escp_pairs (pairing_id, page_topic, heading, product1id, product2id, product3id)
-                        VALUES (%d, %s, %s, %d, %d, %d)
-                        ON DUPLICATE KEY UPDATE
-                            page_topic = VALUES(page_topic),
-                            heading    = VALUES(heading),
-                            product1id = VALUES(product1id),
-                            product2id = VALUES(product2id),
-                            product3id = VALUES(product3id)",
+						'INSERT INTO wp_escp_pairs
+							(pairing_id, page_topic, heading, product1id, product2id, product3id)
+						VALUES
+							(%d, %s, %s, %d, %d, %d)
+						',
 						$pairing_id,
-						$page_topic,
-						$heading,
+						strtolower( $page_topic ),
+						strtolower( $heading ),
 						$product1,
 						$product2,
 						$product3

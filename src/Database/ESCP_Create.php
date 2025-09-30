@@ -46,8 +46,7 @@ class ESCP_Create {
             product2id INT(5) NOT NULL,
             product3id INT(5) NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY  (id),
-            UNIQUE KEY pairing_id (pairing_id)
+            PRIMARY KEY  (id)
         ) $charset_collate;";
 
 		dbDelta( $sql );
