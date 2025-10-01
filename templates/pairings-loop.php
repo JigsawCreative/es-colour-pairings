@@ -48,7 +48,7 @@
                                     ?>
 
                                         <div class="tile-pairing-option-swatch-loop <?php echo $class; ?>">
-                                            <a href="https://emporiosurfaces.local/product-recommendations/product-comparison/?ids=<?php echo implode(",", $products); ?>" data-discount-rate="<?php echo get_field('discount_percentage', $product); ?>% Off" class="tooltip">
+                                            <a href="https://emporiosurfaces.local/perfect-pairings/purchase/?ids=<?php echo implode(",", $products); ?>" data-discount-rate="<?php echo get_field('discount_percentage', $product); ?>% Off" class="tooltip">
                                                 <img src=<?php echo wp_get_attachment_image_url( get_post_thumbnail_id( $product ), 'samples' ); ?>" data-batch-id="<?php echo $product; ?>"><span class="tooltiptext"><?php echo get_the_title( $product ); ?> @ £<?php echo get_field('discounted_price_per_sqm', $product); ?> Per M²</span>
                                             </a>
                                         </div>

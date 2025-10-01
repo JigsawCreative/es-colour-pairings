@@ -22,7 +22,7 @@ class ESCP_Enqueue {
 	public static function enqueue_assets() {
 		$dev_mode = defined( 'WP_DEBUG' ) && WP_DEBUG === true;
 
-		wp_enqueue_style( 'colour-pairings-css', ESCP_URL . ( $dev_mode ? 'assets/css/style.css' : 'dist/css/style.min.css' ), array(), ESCP_VERSION );
+		wp_enqueue_style( 'colour-pairings-css', ESCP_URL . ( $dev_mode ? 'assets/css/colour-pairings.css' : 'dist/css/style.min.css' ), array(), ESCP_VERSION );
 		wp_enqueue_script( 'colour-pairings-js', ESCP_URL . ( $dev_mode ? 'assets/js/script.js' : 'dist/js/script.min.js' ), array( 'jquery' ), ESCP_VERSION, true );
 	}
 }
