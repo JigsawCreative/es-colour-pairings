@@ -63,7 +63,7 @@
 
                     </div><!-- end tile-pairing-options -->
 
-                    <div class="tile-pairing-group-link"><a href="<?php echo $pairings['more_link']; ?>" data-attribute-topic="<?php echo $pairings['pairing_id']; ?>">Discover More </a></div><!-- end tile-pairing-group-link -->
+                    <div class="tile-pairing-group-link"><a href="<?php echo $pairings['more_link']; ?>">Discover More <?php echo $pairings['heading']; ?></a></div><!-- end tile-pairing-group-link -->
                 </div><!-- end tile-pairing-group -->
 
             </div><!-- end tile-pairing-groups -->
