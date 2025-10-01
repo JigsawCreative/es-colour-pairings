@@ -63,29 +63,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
+      # Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Node
+      # Set up Node
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # 3. Install Composer dependencies
+      # Install Composer dependencies
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      # 4. Build plugin distribution
+      # Build plugin distribution
       - name: Build dist
         run: npm ci && npm run dist
 
-      # 5. Zip the plugin
+      # Zip the plugin
       - name: Zip plugin
         run: cd dist && zip -r ../es-colour-pairings.zip es-colour-pairings
 
-      # 6. Create Git tag with PAT
+      # Create Git tag with PAT
       - name: Create Git tag
         env:
           PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
@@ -95,7 +95,7 @@ jobs:
           git tag -a "v${{ github.run_number }}" -m "Release v${{ github.run_number }}"
           git push https://x-access-token:${PAT_GITHUB_TOKEN}@github.com/${{ github.repository }} v${{ github.run_number }}
 
-      # 7. Create GitHub Release
+      # Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
