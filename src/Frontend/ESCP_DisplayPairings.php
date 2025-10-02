@@ -43,4 +43,32 @@ class ESCP_DisplayPairings {
 
 		return $rows;
 	}
+
+	/**
+	 * Get content for the current post.
+	 *
+	 * @param int $post_id Current post ID.
+	 * @return array{
+	 *   url: string,
+	 *   escaped_url: string,
+	 *   parent_slug: string,
+	 *   parent_name: string
+	 * }
+	 */
+	public static function get_post_content( int $post_id ): array {
+
+		$url         = get_permalink( $post_id );
+		$escaped_url = esc_url( $url );
+
+		$post_data   = get_post( wp_get_post_parent_id( $post_id ) );
+		$parent_slug = $post_data ? $post_data->post_name : '';
+		$parent_name = $parent_slug ? str_replace( '-', ' ', $parent_slug ) : '';
+
+		return array(
+			'url'         => $url,
+			'escaped_url' => $escaped_url,
+			'parent_slug' => $parent_slug,
+			'parent_name' => ucwords( $parent_name ),
+		);
+	}
 }
