@@ -1,5 +1,11 @@
 /* Styles for tile pairings templates */
 
+.page-template-pairings-loop .page-content article{max-width:1400px;}
+
+.tile-pairing-container {
+    padding: 2rem 0;
+}
+
 .tile-pairing-group {
     margin-bottom: 3em;
 }
@@ -14,9 +20,9 @@
         }
 
         .tile-pairing-option {
-    flex-grow: 1;
-    flex-basis: 0;
     min-width: 190px;
+    max-width: 500px;
+    width: 33%;
 }
 .tile-pairing-option-swatch-loops {
     display: flex;
@@ -39,7 +45,7 @@
 .tile-pairing-option-swatch-loop img {
     max-width: 100%;
     display: block;
-    /* border-top:1px solid #fff; */
+    width: 100%;
 }
 
 .tile-pairing-option-swatch-loop img {
@@ -47,6 +53,8 @@
     object-fit: cover;
 
 }
+
+
 
 .tile-pairing-option-swatch-loop:first-of-type img {
     aspect-ratio: 1 / 1;
@@ -58,8 +66,7 @@
 
 /* .swatch-loops-3 .tile-pairing-option-swatch-loop:nth-of-type(2) img {border-top:1px solid #ff0000}*/
 
-.tile-pairing-option-swatch-loop:first-of-type a:before {
-    content: attr(data-discount-rate);
+.tile-pairing-option-swatch-loop a:before {
     position: absolute;
     z-index: 2;
     background: #7eacae;
@@ -75,14 +82,43 @@
     border-radius: 50%;
 }
 
+.tile-pairing-option-swatch-loop:first-of-type a:before {
+    content: attr(data-discount-rate);
+}
+
+.tile-pairing-option-swatch-loop .tooltip .tooltiptext{
+    bottom: unset;
+    top: 10%;
+    font-size: 13px;
+    line-height: 1.2em;
+}
+
+.out-of-stock a:before {
+    content: attr(data-batch-id);
+    background: #d04b78;
+}
+.low-stock a:before {
+   content: attr(data-batch-id);
+   background: #f7a78d;
+}
+
+.out-of-stock img {
+    border: 1px solid #d04b78;
+}
+
+.low-stock img {
+    border: 1px solid #f7a78d;
+}
+
+
 .tile-pairing-group-heading
 { font-family: "Oswald", sans-serif;
   font-optical-sizing: auto;
-font-size: 4vw;
+font-size: clamp(1rem, -0.875rem + 8.333vw, 3.5rem);
 text-transform: uppercase;
 text-align: center;
 width:90%; 
-margin:2vw auto;
+margin:1rem auto;
 }
 
 .tile-pairing-group-heading:after{
@@ -90,15 +126,15 @@ margin:2vw auto;
     display: block;
     border-top: 1px solid #000;
     font-weight: 200;
-    font-size: 2vw;
-    padding-top:0.5vw;
+    font-size: 50%;
+    padding-top:0.25em;
 }
 
 .tile-pairing-group-heading:before{
     content:"Trending";
     display: block;
     font-weight: 200;
-    font-size: 2vw;
+    font-size: 50%;
     line-height: 50%;
 }
 

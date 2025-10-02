@@ -59,7 +59,7 @@ class ESCP_Cognito {
 		// Loop each Grouping
 		foreach ( $data['Section']['Grouping'] as $group ) {
 
-			$heading = sanitize_text_field( $group['Heading'] ?? '' );
+			$heading   = sanitize_text_field( $group['Heading'] ?? '' );
 			$more_link = sanitize_text_field( $group['MoreLink'] ?? '' );
 
 			if ( empty( $group['Options'] ) || ! is_array( $group['Options'] ) ) {
@@ -69,9 +69,9 @@ class ESCP_Cognito {
 			// Loop each Options row = one DB row per option.
 			foreach ( $group['Options'] as $option ) {
 				$cognito_option_id = sanitize_text_field( $option['Id'] ?? '' );
-				$product1 = (int) ( $option['Product1ID'] ?? 0 );
-				$product2 = (int) ( $option['Product2ID'] ?? 0 );
-				$product3 = (int) ( $option['Product3ID'] ?? 0 );
+				$product1          = (int) ( $option['Product1ID'] ?? 0 );
+				$product2          = (int) ( $option['Product2ID'] ?? 0 );
+				$product3          = (int) ( $option['Product3ID'] ?? 0 );
 
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
